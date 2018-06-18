@@ -5,4 +5,4 @@ if [[ $(basename `pwd`) != docker ]]
 then
     cd docker/
 fi
-docker build -t y8tm .
+docker build -t yt8m .
