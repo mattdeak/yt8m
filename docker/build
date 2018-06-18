@@ -1,2 +1,9 @@
 #!/bin/bash
+
+# Start in docker/ always
+if [[ $(basename `pwd`) == y8tm ]]
+then
+    cd docker
+fi
+
 docker build -t y8tm .

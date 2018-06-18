@@ -1,1 +1,3 @@
-docker/kaggle.json
+docker/*.json
+data/frame/
+data/video/
