@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Start in root always
+if [[ $(basename `pwd`) == docker ]]
+then
+    cd ../
+fi
+
+docker ps -a | grep y8tm -q
+if [ $? -eq 0 ]; then
+    docker rm -f y8tm
+fi
+
+port="8888"
+while true;
+do
+    echo "Trying port = $port"
+    netstat -ntpl 2> /dev/null | grep $port -q 
+    if [ $? -eq 1 ]; then
+        docker run --name y8tm -d -v $PWD:/home -p $port:8888 -p 6006:6006 y8tm
+        echo "Using port $port"
+        break
+    else
+        ((port--))
+    fi
+done

@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:latest-gpu-py3
+FROM ntaylor22/tensorflow-gpu
 
-RUN pip install kaggle 
-WORKDIR /home/jovyan/
+RUN pip install kaggle
+COPY --chown=jovyan:users kaggle.json /home/jovyan/.kaggle
