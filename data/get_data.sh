@@ -1,29 +1,31 @@
 #!/bin/bash
 
+mkdir -p full/frame full/video sample/frame sample/video
+types=( video frame )
+sets=( train validate test )
+
 read -p "Subsample or full data? [S/F] " size
 if [[ $size =~ ^[Ss]$ ]]
 then
-    sampling='shard=1,100'
-    cd subsample/
+    for type in "${types[@]}"
+    do
+        cd sample/$type
+        for set in "${sets[@]}"
+        do
+            curl -N data.yt8m.org/download.py | tac | tac | shard=1,100 partition=2/$type/$set mirror=us python3
+        done
+    done
 elif [[ $size =~ ^[Ff]$ ]]
 then
-    echo "This one"
-    sampling=''
-    cd full/
+    for type in "${types[@]}"
+    do
+        cd full/$type
+        for set in "${sets[@]}"
+        do
+            curl -N data.yt8m.org/download.py | tac | tac | partition=2/$type/$set mirror=us python3
+        done
+        cd ../..
+    done
 else
-    sampling='wut'
+    echo "idk man"
 fi
-
-cd video
-
-trap 'exit' INT
-curl -N data.yt8m.org/download.py | tac | tac | $sampling partition=2/video/train mirror=us python3
-curl -N data.yt8m.org/download.py | tac | tac | $sampling partition=2/video/validate mirror=us python3
-curl -N data.yt8m.org/download.py | tac | tac | $sampling partition=2/video/test mirror=us python3
-
-# Frame-level
-cd ..
-cd frame
-curl -N data.yt8m.org/download.py | tac | tac | $sampling partition=2/frame/train mirror=us python3
-curl -N data.yt8m.org/download.py | tac | tac | $sampling partition=2/frame/validate mirror=us python3
-curl -N data.yt8m.org/download.py | tac | tac | $sampling partition=2/frame/test mirror=us python3
