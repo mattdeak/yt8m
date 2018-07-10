@@ -1,4 +1,6 @@
-def label_extraction_pipeline(video_files, outfile='labels.txt'):
+import tensorflow as tf
+
+def extract_labels(video_files, outfile='labels.txt'):
     """Extracts labels from the yt8m video files and organizes them
     in a text file.
     
