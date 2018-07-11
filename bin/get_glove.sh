@@ -10,5 +10,6 @@ fi
 wget http://nlp.stanford.edu/data/glove.840B.300d.zip
 unzip glove.840B.300d.zip
 mv glove.840B.300d.txt glove.txt
-split -l 10000 glove.txt
+split -d -l 10000 glove.txt
 mv x* glove/
+rm glove.txt
