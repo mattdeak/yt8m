@@ -3,4 +3,4 @@ networkx==2.1
 pandas==0.23.0
 scikit-learn==0.19.1
 Pillow==5.1.0
-
+markov_clustering==0.0.3.dev0
