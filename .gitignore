@@ -2,3 +2,4 @@ docker/*.json
 data/
 notebooks/.ipynb_checkpoints
 docker/start
+__pycache__/
