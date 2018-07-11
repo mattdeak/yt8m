@@ -1,5 +1,7 @@
+import os
 import time
 import multiprocessing
+import numpy as np
 
 
 def _file_reader(num):
