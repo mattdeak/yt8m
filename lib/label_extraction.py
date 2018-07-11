@@ -15,12 +15,12 @@ def extract_labels(video_files, outfile='labels.txt'):
             for record in tf.python_io.tf_record_iterator(video_file):
                 record = tf.train.Example.FromString(record)
                 id_ = record.features.feature['id'].bytes_list.value[0].decode(encoding='UTF-8')
-                labels = parse_labels(record)
+                labels = _parse_labels(record)
                 output.write(id_ + " " + labels)
                 output.write('\n')
 
 
-def parse_labels(tf_example):
+def _parse_labels(tf_example):
     """Extracts the labels from a yt8m tf.Example object.
     
     Arguments:
@@ -32,10 +32,20 @@ def parse_labels(tf_example):
     """
     # Extract labels
     labels = tf_example.features.feature['labels'].int64_list.value
-    
+
     # Convert to string
     labels = str(labels)
-    
+
     # Remove unecessary punctuation
     labels = labels.replace('[', "").replace("]", "").replace(',', "")
     return labels
+
+
+def load_labels(filename):
+    arr = []
+    with open(data_labels, 'r') as file:
+        for line in file:
+            data = line.split(' ')
+            data[1:] = [int(datum) for datum in data[1:]]
+            arr.append(data)
+    return arr
