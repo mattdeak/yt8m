@@ -43,7 +43,7 @@ def _parse_labels(tf_example):
 
 def load_labels(filename):
     arr = []
-    with open(data_labels, 'r') as file:
+    with open(filename, 'r') as file:
         for line in file:
             data = line.split(' ')
             data[1:] = [int(datum) for datum in data[1:]]
