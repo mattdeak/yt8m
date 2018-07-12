@@ -7,7 +7,7 @@ import numpy as np
 def _file_reader(num):
     if num < 10:
         num = f'0{num}'
-    elif num > 90:
+    elif num >= 90:
         num = 9000 + num - 90
     out = []
     with open(f'/home/data/glove/x{num}', 'rb') as f:
