@@ -1,3 +1,6 @@
+import time
+import random
+
 def timed(func):
     """Decorator that makes function print out its total runtime."""
     def _func(*args):
@@ -7,6 +10,11 @@ def timed(func):
         print(f"{func.__name__} took {time.time() - start_time} seconds")
         return out
     return _func
+
+
+def dict_sample(d, n):
+    keys = random.sample(list(d), n)
+    return {k: d[k] for k in keys}
 
 
 class imputer_dict(dict):
