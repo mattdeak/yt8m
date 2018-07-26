@@ -47,8 +47,10 @@ def load_embedding(name='glove', default_text='the'):
     embedding = imputer_dict(default_text, embedding)
     return embedding
 
+
 def load_text_labels():
     return dict(pd.read_csv('/home/data/label_names_2018.csv').values)
+
 
 def load_int_labels(subset, limit):
     filename = f'/home/data/labels/{subset}_labels.txt'
@@ -74,23 +76,26 @@ def text_to_embedding(text, embedding_dict):
     return out
 
 
+@timed
 def embedding_matrix(subset, limit, embedding):
     int_to_text = load_text_labels()
     X = load_int_labels(subset, limit)
     X = sorted(list(set(val for obs in X.values() for val in obs)))
-    X = list(map(lambda i: int_to_text[i], X))
-    X = [x if isinstance(x, str) else 'the' for x in X]
+    X = [int_to_text[x] if x in int_to_text and isinstance(int_to_text[x], str) else 'the'
+         for x in X]
     X = np.array(list(map(lambda x: text_to_embedding(x, embedding), X)))
     return X
 
 
-def adjacency_matrix(subset, limit):
+@timed
+def adjacency_matrix(subset, limit, identity=False):
     lists = load_int_labels(subset, limit)
-    uniques = sorted(list(set(val for obs in lists for val in obs)))
-    adj_matrix = np.zeros([len(uniques)]*2)
-    for obs in lists:
+    label_indices = sorted(list(set(val for obs in lists.values() for val in obs)))
+    label_indices = dict(zip(label_indices, range(len(label_indices))))
+    adj_matrix = np.zeros([len(label_indices)]*2)
+    for obs in lists.values():
         for label1, label2 in itertools.product(obs, obs):
-            if label1 != label2:
-                coords = (uniques.index(label1), uniques.index(label2))
-                adj_matrix[coords] = 1
+            if label1 != label2 or (identity and label1 == label2):
+                coords = (label_indices[label1], label_indices[label2])
+                adj_matrix[coords] += 1
     return adj_matrix
