@@ -3,10 +3,10 @@ import random
 
 def timed(func):
     """Decorator that makes function print out its total runtime."""
-    def _func(*args):
+    def _func(*args, **kwargs):
         print(f"Starting {func.__name__}...")
         start_time = time.time()
-        out = func(*args)
+        out = func(*args, **kwargs)
         print(f"{func.__name__} took {time.time() - start_time} seconds")
         return out
     return _func
